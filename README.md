@@ -1,12 +1,12 @@
 Charlson Comorbidity Index Calculator
 =====================================
 
-The Charlson index is a commonly used tool to assess medical commodities, and to adjust for risk in health-care services and research [1][1] [2][2]. 
+The Charlson index is a commonly used tool to assess medical commodities, and to adjust for risk in health-care services and research [1][1], [2][2]. 
 Electronic medical records(EMR) are widespread today, and diagnosis codes are usually easily extracted from the EMR.
 The program here processes ICD9 codes for a given number of patients, and produces a Charlson comorbidity table along with a calculated Charlson score. 
 
 # How to use the program
-The program is written in the R programming language. It requires [R][3] to be installed, along with the following packages: `reshape2`, `plyr`, and `ggplot2`.
+The program is written in the R programming language [3][3]. It requires `R` to be installed, along with the following packages: `reshape2`, `plyr`, and `ggplot2`.
 In order to use the program, you will have to add patient identifiers, along with corresponding ICD9 codes to the `input` folder. With this current built, some test patients are added so that the program can run. Here is what you need to do:
 
 - Replace `Patients1.csv`. This file contains patients identifiers (MRN), date of birth (DOB), and date of hospitalization (DOH). Here is how the file look like: 
@@ -37,109 +37,64 @@ In order to use the program, you will have to add patient identifiers, along wit
 
 - All the dates should be in the following format: `YYYY-MM-DD`
 
+- ICD9 codes are formatted as series of digits with no spaces or other characters(such as `.`). For example, an ICD9 code of `275.41` or `275 41` or `275-41` should be entered as `27541`. 
+
+- Note also that leading `0` in ICD9 codes are important. For example an ICD9 code of `0021` should not be entered as `21`.
+
 - The program defaults to only accepting ICD9 diagnoses that were made within 5 years of the hospitalization date. However, you can change this by changing the number in `CharlsonRules4.csv` file.
 
 - After you change the files as outlined above, run `CharlsonCalc.R` file. Make sure that the working directory is set to where this file is. You can use `setwd` function to change the working directory. 
 
 # Output
-The information is processed, and two files are written to the `output` folder. `Charlson.csv` is a table with the patients, their comorbidities, and their Charlson score. `Graph.png` summarizes the comorbidities for all patients. Here is how the output looks like:
+The information is processed, and two files are written to the `output` folder. `Charlson.csv` is a table with the patients, their comorbidities, and their Charlson score. `Graph.png` summarizes the comorbidities for all patients. A snapshot of the output is shown below. Your feedback is always appreciated. Thanks!
 
+![SummaryGraph](output/Graph.png) 
 
 ```
-##    MRN Myocardial Infarction Congestive Heart Failure
-## 1   26                 FALSE                    FALSE
-## 2   27                 FALSE                     TRUE
-## 3   28                 FALSE                    FALSE
-## 4   29                 FALSE                    FALSE
-## 5   30                  TRUE                     TRUE
-## 6   31                 FALSE                     TRUE
-## 7   32                 FALSE                    FALSE
-## 8   33                  TRUE                     TRUE
-## 9   34                 FALSE                     TRUE
-## 10  35                 FALSE                    FALSE
-##    Peripheral Vascular Disease Cerebrovascular Disease Dementia
-## 1                         TRUE                   FALSE    FALSE
-## 2                        FALSE                    TRUE    FALSE
-## 3                        FALSE                    TRUE    FALSE
-## 4                        FALSE                   FALSE    FALSE
-## 5                        FALSE                   FALSE    FALSE
-## 6                        FALSE                   FALSE    FALSE
-## 7                        FALSE                    TRUE    FALSE
-## 8                         TRUE                   FALSE    FALSE
-## 9                        FALSE                   FALSE    FALSE
-## 10                        TRUE                   FALSE    FALSE
-##    Chronic Pulmonary Disease Connective Tissue Disease
-## 1                      FALSE                     FALSE
-## 2                       TRUE                      TRUE
-## 3                      FALSE                     FALSE
-## 4                      FALSE                     FALSE
-## 5                       TRUE                     FALSE
-## 6                      FALSE                     FALSE
-## 7                      FALSE                     FALSE
-## 8                      FALSE                     FALSE
-## 9                      FALSE                      TRUE
-## 10                     FALSE                     FALSE
-##    Peptic Ulcer Disease Mild Liver Disease Diabetes without Complications
-## 1                 FALSE              FALSE                          FALSE
-## 2                 FALSE              FALSE                          FALSE
-## 3                 FALSE               TRUE                           TRUE
-## 4                 FALSE              FALSE                          FALSE
-## 5                 FALSE              FALSE                          FALSE
-## 6                 FALSE              FALSE                           TRUE
-## 7                 FALSE              FALSE                          FALSE
-## 8                 FALSE              FALSE                           TRUE
-## 9                 FALSE              FALSE                          FALSE
-## 10                FALSE               TRUE                           TRUE
-##    Diabetes with Complications Hemiplegia or Paraplegia
-## 1                        FALSE                    FALSE
-## 2                        FALSE                    FALSE
-## 3                         TRUE                    FALSE
-## 4                         TRUE                    FALSE
-## 5                        FALSE                    FALSE
-## 6                         TRUE                    FALSE
-## 7                        FALSE                    FALSE
-## 8                         TRUE                    FALSE
-## 9                        FALSE                    FALSE
-## 10                       FALSE                    FALSE
-##    Moderate or Severe Renal Disease Malignancy without Metastases
-## 1                              TRUE                         FALSE
-## 2                              TRUE                         FALSE
-## 3                              TRUE                         FALSE
-## 4                              TRUE                         FALSE
-## 5                              TRUE                         FALSE
-## 6                              TRUE                         FALSE
-## 7                              TRUE                         FALSE
-## 8                              TRUE                         FALSE
-## 9                              TRUE                         FALSE
-## 10                             TRUE                         FALSE
-##    Lymphoma or Leukemia Moderate or Severe Liver Disease
-## 1                 FALSE                            FALSE
-## 2                 FALSE                            FALSE
-## 3                 FALSE                             TRUE
-## 4                 FALSE                            FALSE
-## 5                 FALSE                            FALSE
-## 6                 FALSE                            FALSE
-## 7                 FALSE                            FALSE
-## 8                 FALSE                            FALSE
-## 9                 FALSE                            FALSE
-## 10                FALSE                             TRUE
-##    Metastatic Solid Tumor  AIDS Charlson Score
-## 1                   FALSE FALSE              6
-## 2                   FALSE FALSE              9
-## 3                   FALSE FALSE              9
-## 4                   FALSE FALSE              4
-## 5                   FALSE FALSE              8
-## 6                   FALSE FALSE              8
-## 7                   FALSE FALSE              5
-## 8                   FALSE FALSE              9
-## 9                   FALSE FALSE              5
-## 10                  FALSE FALSE              9
+##                                  [,1]    [,2]    [,3]    [,4]    [,5]   
+## MRN                              "26"    "27"    "28"    "29"    "30"   
+## Myocardial Infarction            "FALSE" "FALSE" "FALSE" "FALSE" " TRUE"
+## Congestive Heart Failure         "FALSE" " TRUE" "FALSE" "FALSE" " TRUE"
+## Peripheral Vascular Disease      " TRUE" "FALSE" "FALSE" "FALSE" "FALSE"
+## Cerebrovascular Disease          "FALSE" " TRUE" " TRUE" "FALSE" "FALSE"
+## Dementia                         "FALSE" "FALSE" "FALSE" "FALSE" "FALSE"
+## Chronic Pulmonary Disease        "FALSE" " TRUE" "FALSE" "FALSE" " TRUE"
+## Connective Tissue Disease        "FALSE" " TRUE" "FALSE" "FALSE" "FALSE"
+## Peptic Ulcer Disease             "FALSE" "FALSE" "FALSE" "FALSE" "FALSE"
+## Mild Liver Disease               "FALSE" "FALSE" " TRUE" "FALSE" "FALSE"
+## Diabetes without Complications   "FALSE" "FALSE" " TRUE" "FALSE" "FALSE"
+## Diabetes with Complications      "FALSE" "FALSE" " TRUE" " TRUE" "FALSE"
+## Hemiplegia or Paraplegia         "FALSE" "FALSE" "FALSE" "FALSE" "FALSE"
+## Moderate or Severe Renal Disease "TRUE"  "TRUE"  "TRUE"  "TRUE"  "TRUE" 
+## Malignancy without Metastases    "FALSE" "FALSE" "FALSE" "FALSE" "FALSE"
+## Lymphoma or Leukemia             "FALSE" "FALSE" "FALSE" "FALSE" "FALSE"
+## Moderate or Severe Liver Disease "FALSE" "FALSE" " TRUE" "FALSE" "FALSE"
+## Metastatic Solid Tumor           "FALSE" "FALSE" "FALSE" "FALSE" "FALSE"
+## AIDS                             "FALSE" "FALSE" "FALSE" "FALSE" "FALSE"
+## Charlson Score                   "6"     "9"     "9"     "4"     "8"    
+##                                  [,6]    [,7]    [,8]    [,9]    [,10]  
+## MRN                              "31"    "32"    "33"    "34"    "35"   
+## Myocardial Infarction            "FALSE" "FALSE" " TRUE" "FALSE" "FALSE"
+## Congestive Heart Failure         " TRUE" "FALSE" " TRUE" " TRUE" "FALSE"
+## Peripheral Vascular Disease      "FALSE" "FALSE" " TRUE" "FALSE" " TRUE"
+## Cerebrovascular Disease          "FALSE" " TRUE" "FALSE" "FALSE" "FALSE"
+## Dementia                         "FALSE" "FALSE" "FALSE" "FALSE" "FALSE"
+## Chronic Pulmonary Disease        "FALSE" "FALSE" "FALSE" "FALSE" "FALSE"
+## Connective Tissue Disease        "FALSE" "FALSE" "FALSE" " TRUE" "FALSE"
+## Peptic Ulcer Disease             "FALSE" "FALSE" "FALSE" "FALSE" "FALSE"
+## Mild Liver Disease               "FALSE" "FALSE" "FALSE" "FALSE" " TRUE"
+## Diabetes without Complications   " TRUE" "FALSE" " TRUE" "FALSE" " TRUE"
+## Diabetes with Complications      " TRUE" "FALSE" " TRUE" "FALSE" "FALSE"
+## Hemiplegia or Paraplegia         "FALSE" "FALSE" "FALSE" "FALSE" "FALSE"
+## Moderate or Severe Renal Disease "TRUE"  "TRUE"  "TRUE"  "TRUE"  "TRUE" 
+## Malignancy without Metastases    "FALSE" "FALSE" "FALSE" "FALSE" "FALSE"
+## Lymphoma or Leukemia             "FALSE" "FALSE" "FALSE" "FALSE" "FALSE"
+## Moderate or Severe Liver Disease "FALSE" "FALSE" "FALSE" "FALSE" " TRUE"
+## Metastatic Solid Tumor           "FALSE" "FALSE" "FALSE" "FALSE" "FALSE"
+## AIDS                             "FALSE" "FALSE" "FALSE" "FALSE" "FALSE"
+## Charlson Score                   "8"     "5"     "9"     "5"     "9"
 ```
 
-![summary](output/Graph.png) 
-
-
-Your feedback is always appreciated. Thanks!
 
 [1]: http://www.ncbi.nlm.nih.gov/pubmed/12725876/
 [2]: http://www.ncbi.nlm.nih.gov/pubmed/16015512/

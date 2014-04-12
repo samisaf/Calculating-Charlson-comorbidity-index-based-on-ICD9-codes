@@ -1,12 +1,12 @@
 Charlson Comorbidity Index Calculator
 =====================================
 
-The Charlson index is a commonly used tool to assess medical commodities, and to adjust for risk in health-care services and research [1][1] [2][2]. 
+The Charlson index is a commonly used tool to assess medical commodities, and to adjust for risk in health-care services and research [1][1], [2][2]. 
 Electronic medical records(EMR) are widespread today, and diagnosis codes are usually easily extracted from the EMR.
 The program here processes ICD9 codes for a given number of patients, and produces a Charlson comorbidity table along with a calculated Charlson score. 
 
 # How to use the program
-The program is written in the R programming language. It requires [R][3] to be installed, along with the following packages: `reshape2`, `plyr`, and `ggplot2`.
+The program is written in the R programming language [3][3]. It requires `R` to be installed, along with the following packages: `reshape2`, `plyr`, and `ggplot2`.
 In order to use the program, you will have to add patient identifiers, along with corresponding ICD9 codes to the `input` folder. With this current built, some test patients are added so that the program can run. Here is what you need to do:
 
 - Replace `Patients1.csv`. This file contains patients identifiers (MRN), date of birth (DOB), and date of hospitalization (DOH). Here is how the file look like: 
@@ -21,19 +21,21 @@ head(p2)
 
 - All the dates should be in the following format: `YYYY-MM-DD`
 
+- ICD9 codes are formatted as series of digits with no spaces or other characters(such as `.`). For example, an ICD9 code of `275.41` or `275 41` or `275-41` should be entered as `27541`. 
+
+- Note also that leading `0` in ICD9 codes are important. For example an ICD9 code of `0021` should not be entered as `21`.
+
 - The program defaults to only accepting ICD9 diagnoses that were made within 5 years of the hospitalization date. However, you can change this by changing the number in `CharlsonRules4.csv` file.
 
 - After you change the files as outlined above, run `CharlsonCalc.R` file. Make sure that the working directory is set to where this file is. You can use `setwd` function to change the working directory. 
 
 # Output
-The information is processed, and two files are written to the `output` folder. `Charlson.csv` is a table with the patients, their comorbidities, and their Charlson score. `Graph.png` summarizes the comorbidities for all patients. Here is how the output looks like:
+The information is processed, and two files are written to the `output` folder. `Charlson.csv` is a table with the patients, their comorbidities, and their Charlson score. `Graph.png` summarizes the comorbidities for all patients. A snapshot of the output is shown below. Your feedback is always appreciated. Thanks!
 
 ```{r echo=FALSE} 
-Final
 plot
+t(Final)
 ```
-
-Your feedback is always appreciated. Thanks!
 
 [1]: http://www.ncbi.nlm.nih.gov/pubmed/12725876/
 [2]: http://www.ncbi.nlm.nih.gov/pubmed/16015512/
